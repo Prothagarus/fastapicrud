@@ -1,0 +1,18 @@
+{
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": true,
+    "python.envFile": "${workspaceFolder}/conf/.env",
+    // "python.testing.pytestArgs": [
+    //     "--rootdir",
+    //     "${workspaceFolder}/tests"
+    // ],
+    // "python.testing.pytestPath": ".venv/bin/pytest",
+    "python.autoComplete.extraPaths": [],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+}

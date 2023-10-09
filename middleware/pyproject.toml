@@ -1,0 +1,20 @@
+# pyproject.toml
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "integration",
+]
+
+pythonpath = [
+  "src" 
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]  
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools.package-data]
+frontend = ["static/*", "templates/*"]
