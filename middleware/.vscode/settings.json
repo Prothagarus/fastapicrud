@@ -2,12 +2,20 @@
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": true,
     "python.envFile": "${workspaceFolder}/conf/.env",
+    "python.analysis.extraPaths": [
+        "./src"
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
     // "python.testing.pytestArgs": [
     //     "--rootdir",
     //     "${workspaceFolder}/tests"
     // ],
     // "python.testing.pytestPath": ".venv/bin/pytest",
-    "python.autoComplete.extraPaths": [],
+    "python.autoComplete.extraPaths": [
+        "./src"
+    ],
     "python.testing.unittestArgs": [
         "-v",
         "-s",
@@ -15,4 +23,9 @@
         "-p",
         "test_*.py"
     ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "python.analysis.autoSearchPaths": true,
+    "python.missingPackage.severity": "Error",
 }

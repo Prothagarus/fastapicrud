@@ -8,20 +8,12 @@
     }
   ],
   "settings": {
-    "python.analysis.autoSearchPaths": true,
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    },
+
     "workbench.colorCustomizations": {
       "titleBar.activeBackground": "#a75600"
-    },
-    "python.autoComplete.extraPaths": [],
-    "python.missingPackage.severity": "Error",
-    "python.analysis.extraPaths": [],
-    "python.envFile": "${workspaceFolder}/conf/.env",
-    "python.testing.pytestEnabled": true,
-    "python.testing.unittestEnabled": true
+    }
+
   }
 }

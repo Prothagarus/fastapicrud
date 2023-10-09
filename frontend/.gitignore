@@ -161,3 +161,4 @@ cython_debug/
 
 #node.js
 ./node_modules/*
+/vue-getting-started-master
