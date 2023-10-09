@@ -43,9 +43,22 @@ export default defineComponent({
             })
             rowdata.forEach((e: RowComponent) => { this.savedata.push(e.getData()) })
         },
-        savetodatabase() {
-
-        }
+        sendData() {
+            fetch('http://localhost:8043/ToDoGet_Save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.savedata),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        },
 
 
 
@@ -80,5 +93,6 @@ export default defineComponent({
 </script>
 
 <template>
+    <button @click="sendData">Save Data</button>
     <div ref="table"></div>
 </template>
