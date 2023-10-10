@@ -17,6 +17,7 @@ class ToDo(BaseModel):
     task: str
     startdate: Optional[datetime] = Field(None)
     enddate: Optional[datetime] = Field(None)
+    todoid: Optional[int]
     class Config:
         from_attributes = True
 

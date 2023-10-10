@@ -136,7 +136,8 @@ export default defineComponent({
                 {
                     title: 'Start Date',
                     field: 'startdate',
-                    sorter: 'date',
+                    sorter: 'datetime',
+                    //sorterParams: { format: "yyyy-MM-dd HH:mm:ss" },
                     editor: this.flatpickrEditor,
                     formatter: (cell) => DateTime.fromISO(cell.getValue()).toFormat("yyyy-MM-dd HH:mm:ss")
 
@@ -144,7 +145,8 @@ export default defineComponent({
                 {
                     title: 'End Date',
                     field: 'enddate',
-                    sorter: 'date',
+                    sorter: 'datetime',
+                    //sorterParams: { format: "yyyy-MM-dd HH:mm:ss" },
                     editor: this.flatpickrEditor,
                     formatter: (cell) => DateTime.fromISO(cell.getValue()).toFormat("yyyy-MM-dd HH:mm:ss")
                 },

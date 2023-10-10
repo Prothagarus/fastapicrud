@@ -18,10 +18,11 @@ def create_app():
         description="API backend to save to a sql lite database",
         version="0",
         dependencies=[])
+    origins = ["http://localhost:8080","http://localhost:8043","http://localhost:5173"]
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
+        allow_origins=origins,
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],
     )
@@ -46,13 +47,14 @@ def root():
     return "todo"
 
 
-@app.post("/todo", response_model=schemas.ToDo, status_code=status.HTTP_201_CREATED)
-def create_todo(todo: schemas.ToDoCreate, session: Session = Depends(get_session)):
-    tododb = models.ToDo(id=None, task=todo.task, startdate=todo.startdate, enddate=todo.enddate)
-    session.add(tododb)
-    session.commit()
-    session.refresh(tododb)
-    return tododb
+# @app.post("/todo", response_model=schemas.ToDo, status_code=status.HTTP_201_CREATED)
+# def create_todo(todo: schemas.ToDoCreate):#, session: Session = Depends(get_session)):
+#     session = SessionLocal()
+#     tododb = models.ToDoSave(id=None, task=todo["task"], startdate=todo["startdate"], enddate=todo["enddate"],todoid =None)
+#     session.add(tododb)
+#     session.commit()
+#     session.refresh(tododb)
+#     return tododb
 
 @app.get("/todo/{id}", response_model=schemas.ToDo)
 def read_todo(id: int):  # , session: Session = Depends(get_session)):
@@ -70,43 +72,47 @@ def read_todo():  # , session: Session = Depends(get_session)):
     session = SessionLocal()
     todo = session.query(models.ToDo).all()  # get all todo items
     return [schemas.ToDo.model_validate(item) for item in todo]
-
-
-@app.put("/todo/{id}", response_model=schemas.ToDo)
-def update_todo(id: int, todo: schemas.ToDoCreate, session: Session = Depends(get_session)):
-    tododb = session.query(models.ToDo).get(id)
-    if tododb is None:
-        raise HTTPException(status_code=404, detail=f"Todo item with id {id} not found")
-    for var, value in vars(todo).items():
-        setattr(tododb, var, value) if value else None
-    session.commit()
-    session.refresh(tododb)
-    return tododb
-
-
 @app.post("/ToDo_Save/", response_model=List[schemas.ToDo])
 def update_todo_list(
     payload: List[schemas.ToDo],  # , session: Session = Depends(get_session)
 ):
     session = SessionLocal()
-    for todo in payload:
-        # todo = session.query(models.ToDo).get(id)     # get given id
-        itemexist = (
-            session.query(models.ToDo).filter(models.ToDo.id == todo["id"]).first()
-        )  # get given id
-
-        if itemexist == None:
-            todo = models.ToDo(id=None, task=todo["task"],startdate=todo["startdate"],enddate=todo["enddate"])
+    todo = None  # Initialize todo to a default value
+    for item in payload:
+        if item["id"] == None and item["todoid"] == None:
+            todo = models.ToDoSave(id=None, task=item["task"], startdate=item["startdate"], enddate=item["enddate"], todoid=None)
             session.add(todo)
             session.commit()
-
-        # check if id exists. If not, return 404 not found response
-        if itemexist:
-            itemexist.id = todo["id"],
-            itemexist.task = todo["task"],
-            itemexist.startdate=todo["startdate"],
-            itemexist.enddate=todo["enddate"],
+        if item["id"] != None and item["todoid"] == None:
+            todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item["id"]).first()
+            todo.task = item["task"]
+            todo.startdate = item["startdate"]
+            todo.enddate = item["enddate"]
+            todo.todoid = item["id"]
             session.commit()
+        if item["id"] == None and item["todoid"] != None:
+            todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item["todoid"]).first()
+            todo.task = item["task"]
+            todo.startdate = item["startdate"]
+            todo.enddate = item["enddate"]
+            session.commit()
+    return todo
+
+        # itemexist = (
+        #     session.query(models.ToDo).filter(models.ToDo.id == todo["id"]).first()
+        # )  # get given id
+
+        # if itemexist == None:
+        #     todo = models.ToDoSave(id=None, task=todo["task"],startdate=todo["startdate"],enddate=todo["enddate"],todoid =None)
+        #     session.add(todo)
+        #     session.commit()
+
+        # # check if id exists. If not, return 404 not found response
+        # if itemexist:
+        #     itemexist.task = todo["task"]
+        #     itemexist.startdate=todo["startdate"]
+        #     itemexist.enddate=todo["enddate"]
+        #     session.commit()
 
     return todo
 

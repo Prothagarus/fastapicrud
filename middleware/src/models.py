@@ -7,12 +7,20 @@ base = Base()
 
 # Define ToDo class from Base
 class ToDo(base):
-    __tablename__ = "todos"
+    __tablename__ = "todoQuery"
     id = Column(Integer, primary_key=True,autoincrement=True)
     task = Column(String(256))
-    startdate = Column(DateTime,nullable=True)
-    enddate = Column(DateTime,nullable=True)
+    startdate = Column(String,nullable=True)
+    enddate = Column(String,nullable=True)
+    todoid = Column(Integer,nullable=True)
 class ToDoTask(base):
     __tablename__ = "todotask"
     id = Column(Integer, primary_key=True,autoincrement=True)
     task = Column(String(256))
+class ToDoSave(base):
+    __tablename__ = "todosave"
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    task = Column(String(256))
+    startdate = Column(String,nullable=True)
+    enddate = Column(String,nullable=True)
+    todoid =  Column(Integer,nullable=True)
