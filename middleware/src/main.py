@@ -78,30 +78,29 @@ def update_todo_list(
     payload: List[schemas.ToDo],  # , session: Session = Depends(get_session)
 ):
     session = SessionLocal()
-    todos = []  # Initialize todos to an empty list
+    todos = []  # Create an empty list to store ToDoSave objects
     for item in payload:
-        if item["id"] == None and item["todoid"] == None:
-            todo = models.ToDoSave(id=None, task=item["task"], startdate=item["startdate"], enddate=item["enddate"], todoid=None)
+        if item.id is None and item.todoid is None:
+            todo = models.ToDoSave(id=None, task=item.task, startdate=item.startdate, enddate=item.enddate, todoid=None)
             session.add(todo)
             session.commit()
-            todos.append(todo)
-        if item["id"] != None and item["todoid"] == None:
-            todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item["id"]).first()
-            todo.task = item["task"]
-            todo.startdate = item["startdate"]
-            todo.enddate = item["enddate"]
-            todo.todoid = item["id"]
+            todos.append(todo)  # Append the created ToDoSave object to the list
+        elif item.id is not None and item.todoid is None:
+            todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item.id).first()
+            todo.task = item.task
+            todo.startdate = item.startdate
+            todo.enddate = item.enddate
+            todo.todoid = item.id
             session.commit()
-            todos.append(todo)
-        if item["id"] == None and item["todoid"] != None:
-            todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item["todoid"]).first()
-            todo.task = item["task"]
-            todo.startdate = item["startdate"]
-            todo.enddate = item["enddate"]
+            todos.append(todo)  # Append the updated ToDoSave object to the list
+        elif item.id is None and item.todoid is not None:
+            todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item.todoid).first()
+            todo.task = item.task
+            todo.startdate = item.startdate
+            todo.enddate = item.enddate
             session.commit()
-            todos.append(todo)
-    return todos
-
+            todos.append(todo)  # Append the updated ToDoSave object to the list
+    return todos  # Return the list of ToDoSave objects
         # itemexist = (
         #     session.query(models.ToDo).filter(models.ToDo.id == todo["id"]).first()
         # )  # get given id

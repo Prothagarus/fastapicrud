@@ -17,6 +17,7 @@ interface ToDoGet {
     task: string;
     startdate: DateTime;
     enddate: DateTime;
+    todoid: string;
 }
 
 interface Taskdropdown {
@@ -51,17 +52,23 @@ export default defineComponent({
             this.taskdropdown = [];
             fetch('http://localhost:8043/ToDo_DropdownList').then((d) => d.json().then((d2: Array<Taskdropdown>) => { this.taskdropdown = d2; }));
         },
+        // persisttablechangestobuffer(row: RowComponent) {
+        //     this.savedata.push(row.getData());
         persisttablechangestobuffer(row: RowComponent) {
-            this.savedata.push(row.getData());
+            let rowData = row.getData();
+            let todoGet: ToDoGet = rowData;  // Ensure rowData is of type ToDoGet
+            this.savedata.push(todoGet);
         },
         // other methods...
 
         addNewRow() {
             const newRow = {
-                id: '', // You might want to generate a unique ID here
+                id: null, // You might want to generate a unique ID here
                 task: this.taskdropdown[0]?.task || 'uncategorized',
                 startdate: DateTime.local(),
                 enddate: DateTime.local(),
+                todoid: null,
+
             };
             //this.tableData.push(newRow);
             this.tabulator.addRow(newRow);
