@@ -7,7 +7,7 @@ from database import SessionLocal
 
 
 def oneentry():
-    entry: ToDo = {"id": None, "task": "task1"}
+    entry: ToDo = {"id": None, "task": "active"}
     return entry
 
 
