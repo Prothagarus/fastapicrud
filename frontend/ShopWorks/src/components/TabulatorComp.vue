@@ -65,6 +65,7 @@ export default defineComponent({
             };
             //this.tableData.push(newRow);
             this.tabulator.addRow(newRow);
+            this.savedata.push(newRow);
         },
         flatpickrEditor(cell, onRendered, success, cancel) {
             // create and style input

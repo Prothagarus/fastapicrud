@@ -70,6 +70,7 @@ def read_todo(id: int):  # , session: Session = Depends(get_session)):
 @app.get("/ToDoGet/", response_model=List[schemas.ToDo])
 def read_todo():  # , session: Session = Depends(get_session)):
     session = SessionLocal()
+   
     todo = session.query(models.ToDo).all()  # get all todo items
     return [schemas.ToDo.model_validate(item) for item in todo]
 @app.post("/ToDo_Save/", response_model=List[schemas.ToDo])
@@ -77,12 +78,13 @@ def update_todo_list(
     payload: List[schemas.ToDo],  # , session: Session = Depends(get_session)
 ):
     session = SessionLocal()
-    todo = None  # Initialize todo to a default value
+    todos = []  # Initialize todos to an empty list
     for item in payload:
         if item["id"] == None and item["todoid"] == None:
             todo = models.ToDoSave(id=None, task=item["task"], startdate=item["startdate"], enddate=item["enddate"], todoid=None)
             session.add(todo)
             session.commit()
+            todos.append(todo)
         if item["id"] != None and item["todoid"] == None:
             todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item["id"]).first()
             todo.task = item["task"]
@@ -90,13 +92,15 @@ def update_todo_list(
             todo.enddate = item["enddate"]
             todo.todoid = item["id"]
             session.commit()
+            todos.append(todo)
         if item["id"] == None and item["todoid"] != None:
             todo = session.query(models.ToDoSave).filter(models.ToDoSave.id == item["todoid"]).first()
             todo.task = item["task"]
             todo.startdate = item["startdate"]
             todo.enddate = item["enddate"]
             session.commit()
-    return todo
+            todos.append(todo)
+    return todos
 
         # itemexist = (
         #     session.query(models.ToDo).filter(models.ToDo.id == todo["id"]).first()
